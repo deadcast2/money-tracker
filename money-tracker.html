@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Money Tracker</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+      #total {
+        font-size: 5.5em;
+      }
+      .row {
+        margin-top: 40px;
+      }
+    </style>
+    <script>
+      var getTotal = function() {
+        return Number(localStorage.getItem('total')) || 0;
+      };
+
+      var addTotal = function(amount) {
+        localStorage.setItem('total', getTotal() + amount);
+        render(getTotal());
+      };
+
+      var render = function(total) {
+        document.getElementById('total').innerHTML =
+          total.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+      };
+
+      var click = function(id, block) {
+        document.getElementById(id).addEventListener('click', function(e) {
+          block();
+        });
+      };
+
+      var add = function() {
+        var amount = Number(prompt('Add how much?'));
+        if(amount != NaN && amount > 0) {
+          addTotal(amount);
+        }
+      };
+
+      var minus = function() {
+        var amount = Number(prompt('Remove how much?'));
+        if(amount != NaN && amount > 0) {
+          addTotal(-amount);
+        }
+      };
+
+      var reset = function() {
+        if(confirm('Are you sure?')) {
+          addTotal(-getTotal());
+        }
+      };
+
+      var start = function() {
+        render(getTotal());
+        click('plus', add);
+        click('minus', minus);
+        click('reset', reset);
+      };
+    </script>
+  </head>
+  <body onload="start()">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1 id="total" class="text-center"></h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+          <button type="button" id="plus" class="btn btn-success btn-lg btn-block">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="col-xs-4">
+          <button type="button" id="minus" class="btn btn-danger btn-lg btn-block">
+            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="col-xs-4">
+          <button type="button" id="reset" class="btn btn-info btn-lg btn-block">
+            <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <h5 class="text-center"><small>Money Tracker 2018</small></h5>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
